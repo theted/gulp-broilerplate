@@ -1,5 +1,6 @@
 var gulp = require('gulp')
 var concat = require('gulp-concat')
+var uglify = require('gulp-uglify')
 var stylus = require('gulp-stylus')
 var pug = require('gulp-pug')
 var browserSync = require('browser-sync')
@@ -27,6 +28,21 @@ gulp.task('build-views', function buildHTML () {
   })).pipe(gulp.dest(config.path))
 })
 
+// build js - uglified/minified for production
+gulp.task('build-js', function () {
+  gulp.src(config.paths.js)
+    .pipe(concat(config.out.jsMin))
+    .pipe(uglify())
+    .pipe(gulp.dest(config.path))
+})
+
+// build js - simple concatination for development
+gulp.task('build-js-dev', function () {
+  gulp.src(config.paths.js)
+    .pipe(concat(config.out.js))
+    .pipe(gulp.dest(config.path))
+})
+
 gulp.task('browser-sync', function () {
   browserSync({
     files: config.bsFiles,
@@ -43,4 +59,5 @@ gulp.task('default', [
 gulp.task('watch', ['default'], function () {
   gulp.watch(config.paths.stylus, ['build-stylus'])
   gulp.watch(config.paths.views, ['build-views'])
+  gulp.watch(config.paths.js, ['build-js-dev']) // no need to build minified version in development
 })
