@@ -1,0 +1,19 @@
+{
+  "name": "gulp-broilerplate",
+  "version": "1.0.0",
+  "description": "Gulp starting point",
+  "main": "Gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theted/gulp-broilerplate.git"
+  },
+  "author": "Fredrik Sundberg <fredrik@sundbergmedia.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/theted/gulp-broilerplate/issues"
+  },
+  "homepage": "https://github.com/theted/gulp-broilerplate#readme"
+}
