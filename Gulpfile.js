@@ -17,7 +17,7 @@ gulp.task('build-stylus', function () {
     .pipe(gulp.dest(config.path))
 })
 
-gulp.task('build-views', function buildHTML () {
+gulp.task('build-views', function buildHTML() {
   return gulp.src('src/*.pug').pipe(pug({
     compileDebug: true,
     pretty: true,
@@ -47,7 +47,7 @@ gulp.task('browser-sync', function () {
   browserSync({
     files: config.bsFiles,
     port: config.browserSyncPort,
-    server: './dist',
+    server: config.path,
     browser: []
   })
 })
