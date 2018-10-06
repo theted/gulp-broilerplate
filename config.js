@@ -13,7 +13,7 @@ module.exports = {
   paths: {
     js: baseSrc + '*.js',
     stylus: baseSrc + '*.styl',
-    views: baseSrc + '**.pug',
+    views: baseSrc + '**.pug'
   },
   out: {
     css: version + '.css',
