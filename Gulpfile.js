@@ -19,7 +19,7 @@ gulp.task('browser-sync', function() {
   browserSync({
     files: config.bsFiles,
     port: config.browserSyncPort,
-    proxy: "localhost:" + config.port,
+    proxy: 'localhost:' + config.port,
     browser: [],
   });
 });
