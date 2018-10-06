@@ -10,6 +10,7 @@ module.exports = {
   port: 5555,
   browserSyncPort: 5000,
   path: 'dist/',
+  bsFiles: 'dist/**/*.*',
   paths: {
     js: baseSrc + '*.js',
     stylus: baseSrc + '*.styl',
