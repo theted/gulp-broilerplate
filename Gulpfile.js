@@ -1,63 +1,42 @@
-var gulp = require('gulp')
-var concat = require('gulp-concat')
-var uglify = require('gulp-uglify')
-var stylus = require('gulp-stylus')
-var pug = require('gulp-pug')
-var browserSync = require('browser-sync')
-var pkg = require('./package.json')
-var config = require('./config')
+const { watch, src, dest, parallel, series } = require('gulp')
+const browserSync = require('browser-sync').create()
+const config = require('./config')
+const pug = require('gulp-pug')
+const stylus = require('gulp-stylus')
+const concat = require('gulp-concat')
+const uglify = require('gulp-uglify')
+const data = { version: config.version }
+config.pugConfig.data = data
 
-gulp.task('build-stylus', function () {
-  gulp.src(config.paths.stylus)
-    .pipe(stylus({
-      'include css': true
-    }))
-    .pipe(concat(config.out.css))
-    .on('error', console.error.bind(console)) // swallow errors, so that simple syntax errors does not chrash the whole Gulp watch task
-    .pipe(gulp.dest(config.path))
-})
+// compile pug -> HTML
+const html = () => src(config.paths.views)
+  .pipe(pug(config.pugConfig))
+  .pipe(dest('dist'))
 
-gulp.task('build-views', function buildHTML() {
-  return gulp.src('src/*.pug').pipe(pug({
-    compileDebug: true,
-    pretty: true,
-    verbose: true,
-    data: {
-      version: config.version
-    }
-  })).pipe(gulp.dest(config.path))
-})
+// compile stylus -> HTML
+const css = () => src(config.paths.style)
+  .pipe(stylus({ 'include css': true }))
+  .pipe(concat(config.out.css))
+  .pipe(dest('dist'))
 
-// build js - uglified/minified for production
-gulp.task('build-js', function () {
-  gulp.src(config.paths.js)
-    .pipe(concat(config.out.jsMin))
-    .pipe(uglify())
-    .pipe(gulp.dest(config.path))
-})
+// concatinate & minify JS
+const js = () => src(config.paths.js)
+  .pipe(concat(config.out.js))
+  .pipe(uglify())
+  .pipe(dest('dist'))
 
-// build js - simple concatination for development
-gulp.task('build-js-dev', function () {
-  gulp.src(config.paths.js)
-    .pipe(concat(config.out.js))
-    .pipe(gulp.dest(config.path))
-})
+// watch files; compile on file event changes
+const watchFiles = () => {
+  watch(config.paths.style, css)
+  watch(config.paths.views, html)
+  watch(config.paths.js, js)
+}
 
-gulp.task('browser-sync', function () {
-  browserSync({
-    files: config.bsFiles,
-    port: config.browserSyncPort,
-    server: config.path,
-    browser: []
-  })
-})
+// setup browserSync; auto-reload compiled assets in open browser
+const bs = () => browserSync.init(config.bsConfig)
 
-gulp.task('default', [
-  'browser-sync'
-])
+// setup global build script; build all resources
+const build = parallel(html, css, js)
+const defaultTask = parallel(build, bs, watchFiles)
 
-gulp.task('watch', ['default'], function () {
-  gulp.watch(config.paths.stylus, ['build-stylus'])
-  gulp.watch(config.paths.views, ['build-views'])
-  gulp.watch(config.paths.js, ['build-js-dev']) // no need to build minified version in development
-})
+module.exports = { build, bs, js, css, html, watch: watchFiles, default: defaultTask }

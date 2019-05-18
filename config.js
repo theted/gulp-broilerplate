@@ -1,8 +1,8 @@
-var pkg = require('./package.json')
-var appName = 'gulp-broilerplate-'
-var version = appName + pkg.version
-var baseSrc = 'src/**/'
+const pkg = require('./package.json')
+const appName = 'gulp-broilerplate-'
+const version = appName + pkg.version
 
+const baseSrc = 'src/'
 module.exports = {
   name: appName,
   version: version,
@@ -11,9 +11,24 @@ module.exports = {
   browserSyncPort: 5000,
   path: 'dist/',
   bsFiles: 'dist/**/*.*',
+  pugConfig: {
+    compileDebug: true,
+    pretty: true,
+    verbose: true
+  },
+  bsConfig: {
+    server: {
+      baseDir: './dist/'
+    },
+    files: [
+      './dist/' + version + '.css',
+      './dist/' + version + '.js',
+      './dist/**/*.html'
+    ]
+  },
   paths: {
     js: baseSrc + '*.js',
-    stylus: baseSrc + '*.styl',
+    style: baseSrc + '*.styl',
     views: baseSrc + '**.pug'
   },
   out: {
