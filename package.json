@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/theted/gulp-broilerplate#readme",
   "devDependencies": {
-    "browser-sync": "^2.26.5",
+    "browser-sync": "^2.26.7",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-pug": "^4.0.1",
